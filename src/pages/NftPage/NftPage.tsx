@@ -17,7 +17,9 @@ import SocialShare from "../../components/SocialShare/SocialShare";
 import { useGlobalContext } from "../../context/GlobalContext/GlobalContext";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import NotFound from "./Components/NotFound/NotFound";
+import ConfirmPurchaseBuyNowModal from "../../components/ConfirmPurchaseModal/ConfirmPurchaseBuyNowModal";
 
+// Display all details of the nft
 const NftPage = () => {
   const { id } = useParams();
   const {
@@ -36,13 +38,13 @@ const NftPage = () => {
     setShowOfferOrListingModal,
     showConfirmationModal,
     setShowConfirmationModal,
+    showConfirmationBuyNowModal,
+    setShowConfirmationBuyNowModal,
   } = useTransactionContext()!;
   const { collectionContract } = useGlobalContext();
 
   const contractAddress = collectionContract;
 
-  const nftImage = nftInfo?.image;
-  const description = nftInfo?.description;
   const attributes = nftInfo?.attributes;
   const tokenCount = nftInfo?.collection?.tokenCount;
   const token = `${contractAddress}:${id}`;
@@ -62,18 +64,36 @@ const NftPage = () => {
       {nftInfo?.isFlagged && <FlaggedWarning />}
       <div className="nft_page_top">
         <section className="nft_page_section">
-          <img className="nft_image" src={nftImage} alt="" />
+          {nftInfo.media !== null ? (
+            <div>
+              <video
+                poster={nftInfo?.image}
+                autoPlay
+                loop
+                muted
+                controls
+                className="nft_video"
+                controlsList="nodownload"
+                preload="metadata"
+              >
+                <source src={nftInfo?.media} type="video/mp4"></source>
+              </video>
+            </div>
+          ) : (
+            <img src={nftInfo.image} alt="" className="nft_image" />
+          )}
           {isMobile && (
             <NftHeader
               nftInfo={nftInfo}
               nftPriceData={nftPriceData}
               setShowConfirmationModal={setShowConfirmationModal}
               setShowOfferOrListingModal={setShowOfferOrListingModal}
+              setShowConfirmationBuyNowModal={setShowConfirmationBuyNowModal}
             />
           )}
           {isMobile && <CurrentPrice nftPriceData={nftPriceData} />}
           <TraitsHolder attributes={attributes!} tokenCount={tokenCount} />
-          <DescriptionHolder description={description} />
+          <DescriptionHolder />
         </section>
         <section className="nft_page_section">
           {!isMobile && (
@@ -82,6 +102,7 @@ const NftPage = () => {
               nftPriceData={nftPriceData}
               setShowConfirmationModal={setShowConfirmationModal}
               setShowOfferOrListingModal={setShowOfferOrListingModal}
+              setShowConfirmationBuyNowModal={setShowConfirmationBuyNowModal}
             />
           )}
           {!isMobile && <CurrentPrice nftPriceData={nftPriceData} />}
@@ -103,6 +124,12 @@ const NftPage = () => {
       {showConfirmationModal && (
         <ConfirmPurchaseModal
           setShowConfirmationModal={setShowConfirmationModal}
+        />
+      )}
+
+      {showConfirmationBuyNowModal && (
+        <ConfirmPurchaseBuyNowModal
+          setShowConfirmationBuyNowModal={setShowConfirmationBuyNowModal}
         />
       )}
 

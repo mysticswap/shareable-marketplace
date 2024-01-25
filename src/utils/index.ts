@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectedTrait } from "../context/HomeContext/types";
 import { Market, TokenToken } from "../types/rsv-types/collection-nfts.types";
 
@@ -34,9 +35,16 @@ export const convertTokenAmountToDecimal = (amount: number) => {
   return amount * Math.pow(10, 18);
   // might need to change 18 to dynamic figure
 };
+export const convertTokenAmountToDecimals = (
+  amount: number,
+  decimal: number
+) => {
+  return amount * Math.pow(10, decimal);
+  // might need to change 18 to dynamic figure
+};
 
 export const metamaskPresent = () => {
-  var ethereum = window.ethereum;
+  const ethereum = window.ethereum;
   return typeof ethereum !== "undefined" && window.ethereum.isMetaMask;
 };
 
@@ -78,7 +86,7 @@ export const getHostName = () => {
 };
 
 export const getPreviousCollectionAddress = () => {
-  let previousCollectionAddress = localStorage.getItem("current-collection");
+  const previousCollectionAddress = localStorage.getItem("current-collection");
   if (previousCollectionAddress) {
     return JSON?.parse(previousCollectionAddress);
   }
@@ -94,22 +102,16 @@ export const addOpacity = (color: string, opacity: number) => {
   return color + _opacity.toString(16).toUpperCase();
 };
 
-export const updateFavicon = (url: string) => {
-  let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
-  if (!link) {
-    link = document.createElement("link");
-    link.rel = "icon";
-    document.getElementsByTagName("head")[0].appendChild(link);
-  }
-  link.href = url;
-};
-
-export const updateSiteTitle = (text: string) => {
-  document.title = text || "";
-};
-
 export const getOnePercentFee = (tokenValueDecimals: number) => {
   return Number(
     convertTokenAmountToDecimal(tokenValueDecimals * 0.01).toFixed(0)
+  );
+};
+export const getOnePercentFeeToken = (
+  tokenValueDecimals: number,
+  decimals: number
+) => {
+  return Number(
+    convertTokenAmountToDecimals(tokenValueDecimals * 0.01, decimals).toFixed(0)
   );
 };

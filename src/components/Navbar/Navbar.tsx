@@ -49,8 +49,8 @@ const Navbar = () => {
 
   useWindowFreeze(showMobileMenu);
   const userHasNfts = userNfts?.tokens?.length > 0 && user;
-
   const discordUrl = collectionMetadata?.collections?.[0]?.discordUrl;
+
   const twitterUrl = `https://twitter.com/${collectionMetadata?.collections[0]?.twitterUsername}`;
 
   const connectWallet = () => {
@@ -60,7 +60,7 @@ const Navbar = () => {
   useEffect(() => {
     scrollToTop();
     setShowOfferOrListingModal(false);
-  }, [location.pathname]);
+  }, [location.pathname, setShowOfferOrListingModal]);
 
   return (
     <nav className="navbar">
@@ -117,6 +117,7 @@ const Navbar = () => {
                         onClick={() => {
                           setSelectedCollection(collection);
                           setCurrentTab(tabOptions[0]);
+                          setShowDropdownOptions(false);
                         }}
                       >
                         {collection.name}{" "}

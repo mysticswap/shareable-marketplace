@@ -3,6 +3,7 @@ import { GetNftsRsv } from "../../types/rsv-types/collection-nfts.types";
 import { CollectionActivity } from "../../types/rsv-types/collection-activity.types";
 import { CollectionTraitsV2 } from "../../types/rsv-types/collection-traits.types";
 import { UserNfts } from "../../types/rsv-types/user-nfts.types";
+
 import { MarketplaceClientCollection } from "../../types/dynamic-system.types";
 
 export type GlobalContextType = {

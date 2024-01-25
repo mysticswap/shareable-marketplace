@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import "./CardsHolder.css";
 import { useGlobalContext } from "../../context/GlobalContext/GlobalContext";
 import NftCard from "../NftCard/NftCard";
@@ -7,7 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import { BiLoaderCircle } from "react-icons/bi";
 import { getCollectionNftsV2 } from "../../services/api/marketplace-rsv-api";
 import { generateAttributeString } from "../../utils";
-
+import { useHideComponent } from "../../hooks/useHideComponent";
+import { useShowComponent } from "../../hooks/useShowComponent";
+// Get the collection Nfts data and display it in the app
 const CardsHolder = () => {
   const {
     collectionNfts,
@@ -42,7 +45,7 @@ const CardsHolder = () => {
   };
 
   useEffect(() => {
-    setNftsTemp(collectionNfts.tokens);
+    setNftsTemp(collectionNfts?.tokens);
   }, [collectionNfts]);
 
   const nftsList = nftsTemp?.map((nft) => {
@@ -66,6 +69,7 @@ const CardsHolder = () => {
     const attributeString = generateAttributeString(selectedTraits);
 
     if (isAtBottom && collectionNfts.continuation) {
+      useHideComponent("footer");
       setIsFetching(true);
       getCollectionNftsV2(
         collectionChainId,
@@ -86,6 +90,11 @@ const CardsHolder = () => {
         .finally(() => {
           setIsFetching(false);
         });
+    }
+    if (isAtBottom && !collectionNfts.continuation) {
+      useShowComponent("footer");
+    } else {
+      useHideComponent("foter");
     }
   };
 
